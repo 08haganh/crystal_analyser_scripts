@@ -1,0 +1,5 @@
+setup.py
+crystal_analyser/CrystalAnalyser.egg-info/PKG-INFO
+crystal_analyser/CrystalAnalyser.egg-info/SOURCES.txt
+crystal_analyser/CrystalAnalyser.egg-info/dependency_links.txt
+crystal_analyser/CrystalAnalyser.egg-info/top_level.txt
