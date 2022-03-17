@@ -65,6 +65,8 @@ class Supercell(object):
             mol2_index = entry[3]
             # Calculate entry interaction
             disp = mol2.centre_of_geometry - mol1.centre_of_geometry
+            mag = np.sqrt(disp[0]**2 + disp[1]**2 + disp[2]**2)
+            disp_norm = np.array([disp[0],disp[1],disp[2]]) / mag
             dist = np.sqrt(np.dot(disp,disp))
             interplanar_angle = mol2.plane.plane_angle(mol1.plane)
             vec_angle = np.radians(vector_angle(disp, mol1.plane.unit_normal()))
@@ -77,6 +79,8 @@ class Supercell(object):
                         'centroid_z':disp[2],
                         'centroid_distance':dist,
                         'interplanar_angle':interplanar_angle,
+                        'displacement_plane_angle':vec_angle,
+                        'displacement_plane_dp':np.abs(np.dot(disp_norm,mol1.plane.unit_normal().T)),
                         'vertical_offset':v_offset,
                         'horizontal_offset':h_offset}
             interactions.append(interaction)
@@ -131,9 +135,9 @@ class Supercell(object):
                                     columns=columns).set_index(['mol1_index','mol2_index']),6)
 
     def atomic_distance(self,batch):
-        # Calculate atomic distances between pair of molecules on batch
+        # Calculate atomic distances between pair of molecules on batch using numpy arrays
         # pads numpy arrays if molecules have different number of atoms
-        # faster than nested for loops
+        # faster than nested for loops (for atom_x in mol1 for atom_y in mol2)
         interactions = []
         for entry in batch:
             mol1 = entry[0]
